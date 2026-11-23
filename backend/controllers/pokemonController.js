@@ -6,7 +6,9 @@ const pokemonData = {
     id: Number,
     name: String,
     imageUrl: String,
-    types: Array
+    types: Array,
+    stats: {},
+    moves: Array
 }
 
 
@@ -32,8 +34,19 @@ const fetchPokemonDataExternal = async (id) => {
                 id: data.id,
                 name: data.name,
                 imageUrl: data.sprites.front_default,
+                stats: {
+                    hp: data.stats.find(stat => stat.stat.name === 'hp').base_stat,
+                    attack: data.stats.find(stat => stat.stat.name === 'attack').base_stat,
+                    defense: data.stats.find(stat => stat.stat.name === 'defense').base_stat,
+                    specialAttack: data.stats.find(stat => stat.stat.name === 'special-attack').base_stat,
+                    specialDefense: data.stats.find(stat => stat.stat.name === 'special-defense').base_stat,
+                    speed: data.stats.find(stat => stat.stat.name === 'speed').base_stat
+                },
                 types: data.types.map((t) => {
                     return { 'name': t.type.name, 'url': t.type.url }
+                }),
+                moves: data.moves.map((m) => {
+                    return { 'name': m.move.name, 'url': m.move.url }
                 })
             }
             return pokemonData;

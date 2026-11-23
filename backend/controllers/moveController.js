@@ -19,10 +19,11 @@ const typeData = {
 // const damage_relations < will be an object with keys: double_damage_from, double_damage_to, half_damage_from, half_damage_to, no_damage_from, no_damage_to. Each key will have an array of type objects with name and url properties.
 // for 'half_damage_to' and 'double_damage_to' keys, search for the type we're battling. if found, return the amt of damage dealt. else damage = 0.
 
-const fetchMoveFromPokeAPI = async (id) => {
-    
+// get move by name
+export const fetchMoveFromPokeAPI = async (req, res) => {
+    const name = req.params.name;
     try {
-        const response = await fetch(`${moveBaseUrl}/${id}`)
+        const response = await fetch(`${moveBaseUrl}/${name}`)
         if (response.ok){
             data = response.json()
             const moveData = {
@@ -34,17 +35,10 @@ const fetchMoveFromPokeAPI = async (id) => {
                 target: data.target,
                 type: data.type.keys().map(() => {})
 
-            } 
+            }
+            res.status(200).send(moveData)
         }
     } catch (error) {
         console.error('Error fetching Pokemon data:', error);
     }
-
-    }
-}
-
-// get/:id
-const getMove = async (req, res) => {
-    const id = req.param.id
-
 }
