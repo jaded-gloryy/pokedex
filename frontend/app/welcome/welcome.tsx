@@ -22,12 +22,15 @@ export function Welcome() {
     setPokemonNotFound(false);
   }, [pokemon]);
   
-  const fetchPokemon = async ( id?: string, name?: string) => {
+  const fetchPokemon = async (  {id, name }: { id?: string; name?: string }) => {
     try {
+      console.log(`got a name? ${name}`)
+      console.log(`got an id? ${id}`)
       const queryParams = name ? new URLSearchParams({ name }) : ''
       const reqByName = `pokemon?${queryParams}`
       const reqById = `pokemon/${id}`
       const reqUrl = name ? reqByName : reqById
+      console.log(`fetching pokemon with url: ${reqUrl}`)
       const response = await fetch(`${baseUrl}/${reqUrl}`);
       
       
@@ -81,9 +84,14 @@ export function Welcome() {
 
     const isPokemonId = Number(userInput)
     const isValidPokemonName = isValidName(userInput)
+    console.log(`isPokemonId: ${isPokemonId}, isValidPokemonName: ${isValidPokemonName}`)
 
-    isPokemonId || isValidPokemonName ? setCurrentPokemon(await fetchPokemon(userInput)) 
-    : alert("Please enter a valid Pokemon ID between 0 and 150.")
+    // isPokemonId || isValidPokemonName ? setCurrentPokemon(await fetchPokemon(userInput)) 
+    // : alert("Please enter a valid Pokemon ID between 0 and 150.")
+
+    isPokemonId ? setCurrentPokemon(await fetchPokemon({id: userInput}))
+    : isValidPokemonName ? setCurrentPokemon(await fetchPokemon({name: userInput}))
+    : alert("Please enter a valid Pokemon ID between 0 and 150 or a valid Pokemon name.")
   }
 
   return (
